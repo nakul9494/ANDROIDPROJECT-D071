@@ -1,7 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'appscreen1.dart'; // Import AppScreen1 page
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose(){
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +55,7 @@ class LoginPage extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     TextFormField(
+                      controller: emailController,
                       decoration: InputDecoration(
                         labelText: 'Enter Email/Phone',
                         contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -50,6 +67,7 @@ class LoginPage extends StatelessWidget {
                       height: 0.5,
                     ),
                     TextFormField(
+                      controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Enter Password',
@@ -62,13 +80,13 @@ class LoginPage extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: () {
-                  // Navigate to AppScreen1 when login button is pressed
+                onPressed: signIn,
+                  /*// Navigate to AppScreen1 when login button is pressed
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AppScreen1()),
                   );
-                },
+                },*/
                 child: Text(
                   'Login',
                   style: TextStyle(fontSize: 30), // Set font size of the button text
@@ -79,5 +97,15 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+  Future signIn() async{
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+    } on FirebaseAuthException catch(e){
+      print(e);
+    }
   }
 }

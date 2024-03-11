@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AppScreen1 extends StatelessWidget {
@@ -323,10 +324,11 @@ class ProfileScreen extends StatelessWidget {
             // Add more widgets for account details as needed
             SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () => FirebaseAuth.instance.signOut(),
+              /*onPressed: () {
                 // Navigate back to home screen
                 Navigator.popUntil(context, ModalRoute.withName('/'));
-              },
+              },*/
               child: Text('Logout'),
             ),
           ],
